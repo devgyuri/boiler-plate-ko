@@ -42,9 +42,8 @@ app.post('/api/users/register', (req, res) => {
     })
 })
 
-app.post('/login', (req, res) => { // 왜 api/users/login은 안될까?
+app.post('/api/users/login', (req, res) => { // 왜 api/users/login은 안될까?
     // 1. 데이터 베이스에서 요청한 이메일 찾기
-    console.log('find one')
     User.findOne({ email: req.body.email }, (err, user) => {
         if(!user) { // 해당 이메일이 없으면
             return res.json({
@@ -53,7 +52,6 @@ app.post('/login', (req, res) => { // 왜 api/users/login은 안될까?
             })
         }
 
-        // console.log('comparePassword')
         // 2. 요청된 이메일이 DB에 있다면 비밀번호가 일치하는지 확인
         user.comparePassword(req.body.password, (err, isMatch) => {
             if(!isMatch)
@@ -62,7 +60,6 @@ app.post('/login', (req, res) => { // 왜 api/users/login은 안될까?
                     message: "잘못된 비밀번호입니다."
                 })
 
-            // console.log('generate token')
             // 3. 비밀번호가 일치한다면 Token 생성
             user.generateToken((err, user) => {
                 if(err)
